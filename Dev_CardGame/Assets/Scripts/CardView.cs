@@ -6,6 +6,7 @@ public class CardView : MonoBehaviour
     private Image img;
     public int childIndex;
     public Transform currentGroupContainer;
+    //public Image selectedCheckMark;
 
     private void Awake()
     {

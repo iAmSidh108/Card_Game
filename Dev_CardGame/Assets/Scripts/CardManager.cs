@@ -43,6 +43,8 @@ public class CardManager : MonoBehaviour
             groupButton.gameObject.SetActive(false);
             selectedCards.Clear();
         });
+
+        
     }
 
     private void Start()
@@ -73,18 +75,29 @@ public class CardManager : MonoBehaviour
         selectedCard = card;
         selectedCard.childIndex = selectedCardIndex;
         selectedCard.transform.SetParent(parentHolderContainer);
+
+        //SetCheckMark();
     }
 
-    public void ReleaseCard(Transform containerToRelease)
+    public void ReleaseCard(Transform containerToRelease, bool shouldRemoveItem)
     {
         if (selectedCard != null)
         {
             
             selectedCard.transform.SetParent(containerToRelease);
             selectedCard.transform.SetSiblingIndex(selectedCard.childIndex);
+
+            if (shouldRemoveItem)
+            {
+                selectedCards.Remove(selectedCard);
+                
+            }
+            
             selectedCard = null;
+            
         }
-        //selectedCards.Clear();
+        
+        
     }
 
     public void MoveCard(Vector2 position)
@@ -120,5 +133,16 @@ public class CardManager : MonoBehaviour
         {
             groupButton.gameObject.SetActive(true);
         }
+
     }
+
+    public void SetCheckMark()
+    {
+        foreach (CardView card in selectedCards)
+        {
+            //card.selectedCheckMark.gameObject.SetActive(true);
+        }
+    }
+
+    
 }
