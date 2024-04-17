@@ -8,9 +8,12 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private List<Sprite> cardSprites;
     [SerializeField] private Transform cardHolderContainer;
+    [SerializeField] private Transform parentHolderContainer;
     [SerializeField] private GameObject cardPrefab;
 
-    
+    private CardView selectedCard;
+
+    public CardView SelectedCard { get => selectedCard;}
 
     private void Awake()
     {
@@ -38,5 +41,32 @@ public class CardManager : MonoBehaviour
         card.name = "Card" + cardIndex;
         card.transform.SetParent(cardHolderContainer);
         card.GetComponent<CardView>().SetCardImg(cardSprites[cardIndex]);
+    }
+
+    public void SetSelectedCard(CardView card)
+    {
+        int selectedCardIndex=card.transform.GetSiblingIndex();
+
+        selectedCard = card;
+        selectedCard.childIndex = selectedCardIndex;
+        selectedCard.transform.SetParent(parentHolderContainer);
+    }
+
+    public void ReleaseCard()
+    {
+        if (selectedCard != null)
+        {
+            selectedCard.transform.SetParent(cardHolderContainer);
+            selectedCard.transform.SetSiblingIndex(selectedCard.childIndex);
+            selectedCard = null;
+        }
+    }
+
+    public void MoveCard(Vector2 position)
+    {
+        if (selectedCard != null)
+        {
+            selectedCard.transform.position = position;
+        }
     }
 }

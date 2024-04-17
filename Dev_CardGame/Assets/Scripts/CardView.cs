@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class CardView : MonoBehaviour
 {
     private Image img;
+    public int childIndex;
 
     private void Awake()
     {
