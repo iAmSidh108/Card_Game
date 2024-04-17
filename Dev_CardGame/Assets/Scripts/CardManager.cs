@@ -7,7 +7,7 @@ public class CardManager : MonoBehaviour
     public static CardManager instance;
 
     [SerializeField] private List<Sprite> cardSprites;
-    [SerializeField] private Transform cardHolderContainer;
+    [SerializeField] private Transform firstCardHolderContainer;
     [SerializeField] private Transform secondCardHolderContainer;
 
     [SerializeField] private Transform parentHolderContainer;
@@ -37,25 +37,33 @@ public class CardManager : MonoBehaviour
 
     private void OnEnable()
     {
-        groupButton.onClick.AddListener(GroupCards);
+        groupButton.onClick.AddListener(() => {
+
+            GroupCards(secondCardHolderContainer);
+            groupButton.gameObject.SetActive(false);
+            selectedCards.Clear();
+        });
     }
 
     private void Start()
     {
+        
         for (int i = 0;i<24;i++)
         {
             SpawnCard(i);
         }
 
         groupButton.gameObject.SetActive(false);
+        
     }
 
     void SpawnCard(int cardIndex)
     {
         GameObject card=Instantiate(cardPrefab);
         card.name = "Card" + cardIndex;
-        card.transform.SetParent(cardHolderContainer);
+        card.transform.SetParent(firstCardHolderContainer);
         card.GetComponent<CardView>().SetCardImg(cardSprites[cardIndex]);
+        card.GetComponent<CardView>().currentGroupContainer = firstCardHolderContainer;
     }
 
     public void SetSelectedCard(CardView card)
@@ -67,14 +75,16 @@ public class CardManager : MonoBehaviour
         selectedCard.transform.SetParent(parentHolderContainer);
     }
 
-    public void ReleaseCard()
+    public void ReleaseCard(Transform containerToRelease)
     {
         if (selectedCard != null)
         {
-            selectedCard.transform.SetParent(cardHolderContainer);
+            
+            selectedCard.transform.SetParent(containerToRelease);
             selectedCard.transform.SetSiblingIndex(selectedCard.childIndex);
             selectedCard = null;
         }
+        //selectedCards.Clear();
     }
 
     public void MoveCard(Vector2 position)
@@ -90,27 +100,23 @@ public class CardManager : MonoBehaviour
         if (selectedCards.Contains(clickedCards))
             return;
 
-        if(selectedCards.Count >= 2) 
-        {
-            selectedCards.Clear();
-        }
-
-        
-        
         selectedCards.Add(clickedCards);
     }
 
-    public void GroupCards()
+    public void GroupCards(Transform container)
     {
         foreach(CardView card in selectedCards)
         {
-            card.transform.SetParent(secondCardHolderContainer);
+            card.transform.SetParent(container);
+            card.GetComponent<CardView>().currentGroupContainer = container;
+            
         }
+        
     }
 
     private void Update()
     {
-        if (selectedCards.Count == 2)
+        if (selectedCards.Count > 1)
         {
             groupButton.gameObject.SetActive(true);
         }

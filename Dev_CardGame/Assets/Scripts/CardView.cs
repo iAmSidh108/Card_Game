@@ -5,6 +5,7 @@ public class CardView : MonoBehaviour
 {
     private Image img;
     public int childIndex;
+    public Transform currentGroupContainer;
 
     private void Awake()
     {
