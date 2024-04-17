@@ -8,12 +8,18 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private List<Sprite> cardSprites;
     [SerializeField] private Transform cardHolderContainer;
+    [SerializeField] private Transform secondCardHolderContainer;
+
     [SerializeField] private Transform parentHolderContainer;
     [SerializeField] private GameObject cardPrefab;
 
     private CardView selectedCard;
+    private List<CardView> selectedCards=new List<CardView>();
+
+    public Button groupButton;
 
     public CardView SelectedCard { get => selectedCard;}
+    
 
     private void Awake()
     {
@@ -25,6 +31,13 @@ public class CardManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        
+    }
+
+    private void OnEnable()
+    {
+        groupButton.onClick.AddListener(GroupCards);
     }
 
     private void Start()
@@ -33,6 +46,8 @@ public class CardManager : MonoBehaviour
         {
             SpawnCard(i);
         }
+
+        groupButton.gameObject.SetActive(false);
     }
 
     void SpawnCard(int cardIndex)
@@ -67,6 +82,37 @@ public class CardManager : MonoBehaviour
         if (selectedCard != null)
         {
             selectedCard.transform.position = position;
+        }
+    }
+
+    public void AddClickedCardsToList(CardView clickedCards)
+    {
+        if (selectedCards.Contains(clickedCards))
+            return;
+
+        if(selectedCards.Count >= 2) 
+        {
+            selectedCards.Clear();
+        }
+
+        
+        
+        selectedCards.Add(clickedCards);
+    }
+
+    public void GroupCards()
+    {
+        foreach(CardView card in selectedCards)
+        {
+            card.transform.SetParent(secondCardHolderContainer);
+        }
+    }
+
+    private void Update()
+    {
+        if (selectedCards.Count == 2)
+        {
+            groupButton.gameObject.SetActive(true);
         }
     }
 }

@@ -10,23 +10,23 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        
+        CardManager.instance.AddClickedCardsToList(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (eventData.pointerCurrentRaycast.gameObject != null)
-        {
-            //Debug.Log("OnPointerDown " + eventData.pointerCurrentRaycast.gameObject.name);
-            if (eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>() != null)
-            {
-                CardManager.instance.SetSelectedCard(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
-            }
-        }
+        //if (eventData.pointerCurrentRaycast.gameObject != null)
+        //{
+        //    //Debug.Log("OnPointerDown " + eventData.pointerCurrentRaycast.gameObject.name);
+        //    if (eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>() != null)
+        //    {
+        //        CardManager.instance.SetSelectedCard(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
+        //    }
+        //}
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        CardManager.instance.ReleaseCard();
+        //CardManager.instance.ReleaseCard();
     }
 }
