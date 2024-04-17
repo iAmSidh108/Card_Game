@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IPointerClickHandler
+public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     GameObject clickedObject;
     
@@ -13,24 +13,16 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        CardManager.instance.AddClickedCardsToList(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         clickedObject = eventData.pointerCurrentRaycast.gameObject;
 
-        
-        if (eventData.pointerCurrentRaycast.gameObject != null)
+        if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>() != null)
         {
-            
-            if (eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>() != null)
-            {
-                CardManager.instance.SetSelectedCard(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
-            }
+            CardManager.instance.SetSelectedCard(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
+            CardManager.instance.AddClickedCardsToList(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
         }
+
 
         clickedObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
     }
