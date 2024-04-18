@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    GameObject clickedObject;
+    private GameObject _clickedObject;
+
+    [Header("UI")]
     [SerializeField] private Image groupbutton;
     [SerializeField] private Image restartButton;
 
@@ -15,7 +17,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        clickedObject = eventData.pointerCurrentRaycast.gameObject;
+        _clickedObject = eventData.pointerCurrentRaycast.gameObject;
 
         if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>() != null)
         {
@@ -23,7 +25,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             CardManager.instance.SetSelectedCard(eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>());
         }
 
-        clickedObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        _clickedObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
         groupbutton.raycastTarget = false;
         restartButton.raycastTarget = false;
 
@@ -31,7 +33,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (clickedObject.GetComponent<CardView>() || eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>())
+        if (_clickedObject.GetComponent<CardView>() || eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>())
         {
             if (eventData.pointerCurrentRaycast.gameObject != null && !CheckIfSameContainer(eventData))
             {
@@ -39,10 +41,10 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             }
             else
             {
-                CardManager.instance.ReleaseCard(clickedObject.GetComponent<CardView>().currentGroupContainer, false);
+                CardManager.instance.ReleaseCard(_clickedObject.GetComponent<CardView>().currentGroupContainer, false);
             }
 
-            clickedObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
+            _clickedObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
             groupbutton.raycastTarget = true;
             restartButton.raycastTarget = true;
         }
@@ -54,7 +56,7 @@ public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         if (eventData != null)
         {
             
-            return clickedObject.GetComponent<CardView>().currentGroupContainer == eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>().currentGroupContainer;
+            return _clickedObject.GetComponent<CardView>().currentGroupContainer == eventData.pointerCurrentRaycast.gameObject.GetComponent<CardView>().currentGroupContainer;
         }
         else
         {

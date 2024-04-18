@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class JsonHandler : MonoBehaviour
 {
+    //Singleton Pattern 
     public static JsonHandler instance;
+
+    [Header("JSON")]
     [SerializeField] private TextAsset jsonData;
+
+    [Header("Card")]
     public Sprite[] cardSprites; // Array of card sprites
     List<string> cardNames = new List<string>();
 

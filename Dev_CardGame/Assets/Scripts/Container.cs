@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class Container : MonoBehaviour
 {
-    public bool isBeingUsed=false;
+    [Header("Flags")]
+    public bool isBeingUsed = false;
+
+    [Header("UI")]
     public TextMeshProUGUI groupLabel;
 
     private void Start()
