@@ -17,7 +17,8 @@ public class CardManager : MonoBehaviour
     private CardView selectedCard;
     private List<CardView> selectedCardsList=new List<CardView>();
 
-    public Button groupButton;
+    [SerializeField] private Button groupButton;
+    [SerializeField] private Button playButton;
     [SerializeField] GameObject noGroupPopUp;
     
     private void Awake()
@@ -30,6 +31,13 @@ public class CardManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        playButton.onClick.AddListener(() => {
+
+            Debug.Log("Play Pressed");
+            playButton.gameObject.SetActive(false);
+            JsonHandler.instance.SpawnCards(cardPrefab, firstCardGroupContainer);
+        });
     }
 
     private void OnEnable()
@@ -44,7 +52,6 @@ public class CardManager : MonoBehaviour
                 return;
             }
                 
-
             GroupCards(GetCurrentFreeGroup());
             groupButton.gameObject.SetActive(false);
             SetCheckMarkOff();
@@ -53,12 +60,11 @@ public class CardManager : MonoBehaviour
 
         
     }
+    
 
     private void Start()
     {
-        JsonHandler.instance.SpawnCards(cardPrefab, firstCardGroupContainer);
         groupButton.gameObject.SetActive(false);
-        
     }
 
     public void SetSelectedCard(CardView card)
