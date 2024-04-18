@@ -7,7 +7,7 @@ public class CardView : MonoBehaviour
     public int childIndex;
     public Transform currentGroupContainer;
     public Image selectedCheckMark;
-
+    
     private void Awake()
     {
         img = GetComponent<Image>();

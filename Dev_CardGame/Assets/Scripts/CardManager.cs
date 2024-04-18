@@ -7,8 +7,9 @@ public class CardManager : MonoBehaviour
     public static CardManager instance;
 
     [SerializeField] private List<Sprite> cardSprites;
-    [SerializeField] private Transform firstCardHolderContainer;
-    [SerializeField] private Transform secondCardHolderContainer;
+    [SerializeField] private Transform firstCardGroupContainer;
+    [SerializeField] private Transform[] groupList;
+    private int currentContainerIndex = 1;
 
     [SerializeField] private Transform parentHolderContainer;
     [SerializeField] private GameObject cardPrefab;
@@ -17,8 +18,6 @@ public class CardManager : MonoBehaviour
     private List<CardView> selectedCardsList=new List<CardView>();
 
     public Button groupButton;
-
-    public CardView SelectedCard { get => selectedCard;}
     
 
     private void Awake()
@@ -31,7 +30,7 @@ public class CardManager : MonoBehaviour
         {
             Destroy(this);
         }
-
+        
         
     }
 
@@ -39,7 +38,10 @@ public class CardManager : MonoBehaviour
     {
         groupButton.onClick.AddListener(() => {
 
-            GroupCards(secondCardHolderContainer);
+            if (GetCurrentFreeGroup() == null)
+                return;
+
+            GroupCards(GetCurrentFreeGroup());
             groupButton.gameObject.SetActive(false);
             SetCheckMarkOff();
             selectedCardsList.Clear();
@@ -64,9 +66,9 @@ public class CardManager : MonoBehaviour
     {
         GameObject card=Instantiate(cardPrefab);
         card.name = "Card" + cardIndex;
-        card.transform.SetParent(firstCardHolderContainer);
+        card.transform.SetParent(firstCardGroupContainer);
         card.GetComponent<CardView>().SetCardImg(cardSprites[cardIndex]);
-        card.GetComponent<CardView>().currentGroupContainer = firstCardHolderContainer;
+        card.GetComponent<CardView>().currentGroupContainer = firstCardGroupContainer;
     }
 
     public void SetSelectedCard(CardView card)
@@ -92,6 +94,7 @@ public class CardManager : MonoBehaviour
                 selectedCard.selectedCheckMark.gameObject.SetActive(false);
                 selectedCardsList.Remove(selectedCard);
             }
+            selectedCard.currentGroupContainer = containerToRelease;
 
             selectedCard = null;
         }
@@ -120,8 +123,8 @@ public class CardManager : MonoBehaviour
         {
             card.transform.SetParent(container);
             card.GetComponent<CardView>().currentGroupContainer = container;
-            
         }
+        currentContainerIndex++;
     }
 
     private void Update()
@@ -149,7 +152,19 @@ public class CardManager : MonoBehaviour
         }
     }
 
-
-
-
+    Transform GetCurrentFreeGroup()
+    {
+        Transform freeGroup= null;
+        foreach(Transform container in groupList)
+        {
+            if (!container.GetComponent<Container>().isBeingUsed)
+            {
+                freeGroup= container;
+                
+            }
+            
+        }
+        
+        return freeGroup;
+    }
 }
