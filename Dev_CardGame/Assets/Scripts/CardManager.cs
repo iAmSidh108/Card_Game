@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour
@@ -19,6 +20,7 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private Button groupButton;
     [SerializeField] private Button playButton;
+    [SerializeField] private Button restartButton;
     [SerializeField] GameObject noGroupPopUp;
     
     private void Awake()
@@ -34,9 +36,13 @@ public class CardManager : MonoBehaviour
 
         playButton.onClick.AddListener(() => {
 
-            Debug.Log("Play Pressed");
             playButton.gameObject.SetActive(false);
             JsonHandler.instance.SpawnCards(cardPrefab, firstCardGroupContainer);
+        });
+
+        restartButton.onClick.AddListener(() => {
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         });
     }
 
