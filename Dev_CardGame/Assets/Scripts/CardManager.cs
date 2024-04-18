@@ -11,7 +11,6 @@ public class CardManager : MonoBehaviour
     [SerializeField] private Transform firstCardGroupContainer;
     [SerializeField] private Transform[] groupList;
     
-
     [SerializeField] private Transform parentHolderContainer;
     [SerializeField] private GameObject cardPrefab;
 
@@ -21,7 +20,6 @@ public class CardManager : MonoBehaviour
     public Button groupButton;
     [SerializeField] GameObject noGroupPopUp;
     
-
     private void Awake()
     {
         if (instance == null)
@@ -32,8 +30,6 @@ public class CardManager : MonoBehaviour
         {
             Destroy(this);
         }
-        
-        
     }
 
     private void OnEnable()
@@ -60,23 +56,9 @@ public class CardManager : MonoBehaviour
 
     private void Start()
     {
-        
-        for (int i = 0;i<24;i++)
-        {
-            SpawnCard(i);
-        }
-
+        JsonHandler.instance.SpawnCards(cardPrefab, firstCardGroupContainer);
         groupButton.gameObject.SetActive(false);
         
-    }
-
-    void SpawnCard(int cardIndex)
-    {
-        GameObject card=Instantiate(cardPrefab);
-        card.name = "Card" + cardIndex;
-        card.transform.SetParent(firstCardGroupContainer);
-        card.GetComponent<CardView>().SetCardImg(cardSprites[cardIndex]);
-        card.GetComponent<CardView>().currentGroupContainer = firstCardGroupContainer;
     }
 
     public void SetSelectedCard(CardView card)
@@ -87,7 +69,6 @@ public class CardManager : MonoBehaviour
         selectedCard.childIndex = selectedCardIndex;
         selectedCard.transform.SetParent(parentHolderContainer);
 
-        //SetCheckMark();
     }
 
     public void ReleaseCard(Transform containerToRelease, bool shouldRemoveItem)
@@ -139,6 +120,10 @@ public class CardManager : MonoBehaviour
         if (selectedCardsList.Count > 1)
         {
             groupButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            groupButton.gameObject.SetActive(false);
         }
         
     }
