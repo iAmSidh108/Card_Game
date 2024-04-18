@@ -41,6 +41,7 @@ public class CardManager : MonoBehaviour
 
             GroupCards(secondCardHolderContainer);
             groupButton.gameObject.SetActive(false);
+            SetCheckMarkOff();
             selectedCards.Clear();
         });
 
@@ -89,9 +90,10 @@ public class CardManager : MonoBehaviour
 
             if (shouldRemoveItem)
             {
+                selectedCard.selectedCheckMark.gameObject.SetActive(false);
                 selectedCards.Remove(selectedCard);
-                
             }
+
             
             selectedCard = null;
             
@@ -133,16 +135,26 @@ public class CardManager : MonoBehaviour
         {
             groupButton.gameObject.SetActive(true);
         }
-
+        SetCheckMarkOn();
     }
 
-    public void SetCheckMark()
+    public void SetCheckMarkOn()
     {
         foreach (CardView card in selectedCards)
         {
-            //card.selectedCheckMark.gameObject.SetActive(true);
+            card.selectedCheckMark.gameObject.SetActive(true);
         }
     }
 
-    
+    public void SetCheckMarkOff()
+    {
+        foreach (CardView card in selectedCards)
+        {
+            card.selectedCheckMark.gameObject.SetActive(false);
+        }
+    }
+
+
+
+
 }
