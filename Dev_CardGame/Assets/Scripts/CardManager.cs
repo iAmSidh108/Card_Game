@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private List<Sprite> cardSprites;
     [SerializeField] private Transform firstCardGroupContainer;
     [SerializeField] private Transform[] groupList;
-    private int currentContainerIndex = 1;
+    
 
     [SerializeField] private Transform parentHolderContainer;
     [SerializeField] private GameObject cardPrefab;
@@ -18,6 +19,7 @@ public class CardManager : MonoBehaviour
     private List<CardView> selectedCardsList=new List<CardView>();
 
     public Button groupButton;
+    [SerializeField] GameObject noGroupPopUp;
     
 
     private void Awake()
@@ -39,7 +41,13 @@ public class CardManager : MonoBehaviour
         groupButton.onClick.AddListener(() => {
 
             if (GetCurrentFreeGroup() == null)
+            {
+                StartCoroutine(NoGroupAvailablePopupandHide());
+                SetCheckMarkOff();
+                selectedCardsList.Clear();
                 return;
+            }
+                
 
             GroupCards(GetCurrentFreeGroup());
             groupButton.gameObject.SetActive(false);
@@ -124,7 +132,6 @@ public class CardManager : MonoBehaviour
             card.transform.SetParent(container);
             card.GetComponent<CardView>().currentGroupContainer = container;
         }
-        currentContainerIndex++;
     }
 
     private void Update()
@@ -152,19 +159,26 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    Transform GetCurrentFreeGroup()
+    private Transform GetCurrentFreeGroup()
     {
         Transform freeGroup= null;
-        foreach(Transform container in groupList)
+        for (int i = 0; i < groupList.Length; i++)
         {
-            if (!container.GetComponent<Container>().isBeingUsed)
+            if (!groupList[i].GetComponent<Container>().isBeingUsed)
             {
-                freeGroup= container;
-                
+                freeGroup = groupList[i];
+
             }
-            
         }
-        
+
         return freeGroup;
+    }
+
+    IEnumerator NoGroupAvailablePopupandHide()
+    {
+        noGroupPopUp.SetActive(true);
+
+        yield return new WaitForSeconds(1.5f);
+        noGroupPopUp.SetActive(false);
     }
 }

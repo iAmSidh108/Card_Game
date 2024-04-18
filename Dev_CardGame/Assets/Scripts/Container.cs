@@ -15,7 +15,6 @@ public class Container : MonoBehaviour
 
     private void Update()
     {
-        
         if (transform.childCount < 2)
         {
             isBeingUsed = false;

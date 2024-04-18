@@ -1,18 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IPointerClickHandler
+public class InputManager : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     GameObject clickedObject;
 
     public void OnDrag(PointerEventData eventData)
     {
         CardManager.instance.MoveCard(eventData.position);
-    }
-
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        
     }
 
     public void OnPointerDown(PointerEventData eventData)
