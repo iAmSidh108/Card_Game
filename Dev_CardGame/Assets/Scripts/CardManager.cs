@@ -14,7 +14,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private GameObject cardPrefab;
 
     private CardView selectedCard;
-    private List<CardView> selectedCards=new List<CardView>();
+    private List<CardView> selectedCardsList=new List<CardView>();
 
     public Button groupButton;
 
@@ -42,7 +42,7 @@ public class CardManager : MonoBehaviour
             GroupCards(secondCardHolderContainer);
             groupButton.gameObject.SetActive(false);
             SetCheckMarkOff();
-            selectedCards.Clear();
+            selectedCardsList.Clear();
         });
 
         
@@ -84,22 +84,17 @@ public class CardManager : MonoBehaviour
     {
         if (selectedCard != null)
         {
-            
             selectedCard.transform.SetParent(containerToRelease);
             selectedCard.transform.SetSiblingIndex(selectedCard.childIndex);
 
             if (shouldRemoveItem)
             {
                 selectedCard.selectedCheckMark.gameObject.SetActive(false);
-                selectedCards.Remove(selectedCard);
+                selectedCardsList.Remove(selectedCard);
             }
 
-            
             selectedCard = null;
-            
         }
-        
-        
     }
 
     public void MoveCard(Vector2 position)
@@ -112,35 +107,35 @@ public class CardManager : MonoBehaviour
 
     public void AddClickedCardsToList(CardView clickedCards)
     {
-        if (selectedCards.Contains(clickedCards))
+        if (selectedCardsList.Contains(clickedCards))
             return;
 
-        selectedCards.Add(clickedCards);
+        selectedCardsList.Add(clickedCards);
+        SetCheckMarkOn();
     }
 
     public void GroupCards(Transform container)
     {
-        foreach(CardView card in selectedCards)
+        foreach(CardView card in selectedCardsList)
         {
             card.transform.SetParent(container);
             card.GetComponent<CardView>().currentGroupContainer = container;
             
         }
-        
     }
 
     private void Update()
     {
-        if (selectedCards.Count > 1)
+        if (selectedCardsList.Count > 1)
         {
             groupButton.gameObject.SetActive(true);
         }
-        SetCheckMarkOn();
+        
     }
 
     public void SetCheckMarkOn()
     {
-        foreach (CardView card in selectedCards)
+        foreach (CardView card in selectedCardsList)
         {
             card.selectedCheckMark.gameObject.SetActive(true);
         }
@@ -148,7 +143,7 @@ public class CardManager : MonoBehaviour
 
     public void SetCheckMarkOff()
     {
-        foreach (CardView card in selectedCards)
+        foreach (CardView card in selectedCardsList)
         {
             card.selectedCheckMark.gameObject.SetActive(false);
         }
